@@ -1,0 +1,147 @@
+<html>
+<head>
+<title>Saint Louis Neighborhoods - Assignment 4</title>
+
+<link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/css/main.css">
+<script src="https://js.arcgis.com/4.18/"></script>
+<style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+</style>
+<script>
+require([
+      "esri/Map",
+      "esri/layers/FeatureLayer",
+      "esri/views/MapView",
+      "dojo/domReady!"
+    ], function(
+      Map,
+      FeatureLayer,
+      MapView
+    ) {
+
+      var map = new Map({
+        basemap: "streets"
+      });
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center:[-90, 38.6750],
+        zoom: 10
+      });
+
+      var template = {
+        title: "Neighborhood: {NHD_NAME}",
+        content: [{
+          type: "fields",
+          fieldInfos: [{
+            fieldName: "FID",
+            label: "FID: ",
+            visible: true
+          }, {
+            fieldName: "NHD_NUM",
+            label: "Neighborhood number: ",
+            visible: true,
+            format: {
+              digitSeparator: true,
+              places: 0
+            }
+          }, {
+            fieldName: "NHD_NAME",
+            label: "Neighborhood name: ",
+            visible: true,
+            format: {
+              digitSeparator: true,
+              places: 0
+            }
+          }, {
+            fieldName: "ANGLE",
+            label: "Angle:",
+            visible: true,
+            format: {
+              digitSeparator: true,
+              places: 0
+            }
+          }, {
+            fieldName: "NHD_NUMTXT",
+            label: "Neighborhood number & name:",
+            visible: true,
+            format: {
+              digitSeparator: true,
+              places: 0
+            }
+          }, {
+            fieldName: "NHD_NUM_ST",
+            label: "Street number:",
+            visible: true,
+            format: {
+              digitSeparator: true,
+              places: 0
+          }
+          }, {
+            fieldName: "Shape__Area",
+            label: "Area in feet:",
+            visible: true,
+            format: {
+              digitSeparator: true,
+              places: 0
+          }
+          }, {
+            fieldName: "Shape__Length",
+            label: "Length in feet:",
+            visible: true,
+            format: {
+              digitSeparator: true,
+              places: 0
+          }
+          },
+                      ]
+        }]
+      };
+
+     var symbol = {
+      type: "picture-marker",
+      url: "https://cdn.iconscout.com/icon/premium/png-256-thumb/hockey-240-984443.png",
+      width: "64px",
+      height: "64px"
+};
+  var renderer = {
+      type: "simple",
+      symbol: symbol
+    };
+
+      var featureLayer = new FeatureLayer({
+        url: "https://services2.arcgis.com/bB9Y1bGKerz1PTl5/ArcGIS/rest/services/STL_Neighborhood/FeatureServer/0",
+        outFields: ["*"],
+        popupTemplate: template,
+        renderer:renderer
+      });
+  
+      map.add(featureLayer);
+  
+      featureLayer.renderer = {
+      type: "simple",
+      symbol: {
+        type: "simple-marker",
+        size: 6,
+        color: "maroon",
+        outline: {
+          width: 0.5,
+          color: "white"
+        }
+      }
+    };
+    });
+</script>
+</head>
+<body>
+<div id="viewDiv"></div>
+</body>
+</html>
